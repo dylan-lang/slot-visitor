@@ -16,13 +16,13 @@ define macro slot-visitor-definer
                      keys)
             end for;
          end method;
-         
+
          define method ?name ## "-slots"
             (col :: <collection>, action :: <function>, #key, #all-keys)
          => ()
          end method
       }
-   
+
    { define slot-visitor ?:name ?classes:* end }
    => {
          define generic ?name
@@ -33,7 +33,7 @@ define macro slot-visitor-definer
             (o :: <object>, f :: <function>, #key, #all-keys)
          => ()
          end method;
-         
+
          define generic ?name ## "-slots"
             (o :: <object>, f :: <function>, #key, #all-keys)
          => ();
@@ -51,7 +51,7 @@ end macro;
 define macro class-visitors
    { class-visitors(?:name) }
    => { }
-   
+
    { class-visitors(?:name; ?class-name:name, ?slots; ?more:*) }
    => {
          define method ?name
@@ -73,7 +73,7 @@ define macro class-visitors
                end unless;
             end unless;
          end method;
-         
+
          define method ?name ## "-slots"
             (object :: ?class-name, action :: <function>, #next next-method,
              #rest keys, #key, #all-keys)

@@ -111,7 +111,7 @@ the action function.
 [1]: The visitor function has the following signature:
 
 : NAME (object :: CLASS, action :: <function>, #key, #all-keys) => ()
- 
+
 
 [2]: An action function must be compatible with the following signature, but may
 include additional keyword parameters corresponding to arguments of the visitor
