@@ -10,9 +10,15 @@ define macro slot-visitor-definer
          define method ?name
             (col :: <collection>, action :: <function>, #rest keys, #key, #all-keys)
          => ()
+            // BUGFIX: This pass-through function works around issue #424.
+            local method my-element-setter (v, c :: <mutable-collection>, k)
+               element-setter(v, c, k)
+            end method;
+
+            // Recurse into collection elements
             remove-property!(keys, #"setter");
             for (o keyed-by i in col)
-               apply(?name, o, action, setter:, rcurry(element-setter, col, i),
+               apply(?name, o, action, setter:, rcurry(my-element-setter, col, i),
                      keys)
             end for;
          end method;
@@ -20,6 +26,7 @@ define macro slot-visitor-definer
          define method ?name ## "-slots"
             (col :: <collection>, action :: <function>, #key, #all-keys)
          => ()
+            // No slots in a collection
          end method
       }
 
@@ -29,11 +36,6 @@ define macro slot-visitor-definer
             (o :: <object>, f :: <function>, #key, #all-keys)
          => ();
 
-         define method ?name
-            (o :: <object>, f :: <function>, #key, #all-keys)
-         => ()
-         end method;
-
          define generic ?name ## "-slots"
             (o :: <object>, f :: <function>, #key, #all-keys)
          => ();
@@ -41,6 +43,7 @@ define macro slot-visitor-definer
          define method ?name ## "-slots"
             (o :: <object>, f :: <function>, #key, #all-keys)
          => ()
+            // Don't do any slots of <object>
          end method;
 
          class-visitors(?name; ?classes)
@@ -82,7 +85,7 @@ define macro class-visitors
                apply(?name, object.getter, action, setter:, setter & rcurry(setter, object),
                      keys)
             end for;
-            next-method()
+            next-method()  // Visit slots of superclasses
          end method;
 
          class-visitors(?name; ?more)

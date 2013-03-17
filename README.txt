@@ -75,8 +75,9 @@ arguments are passed on to each action function application.
 
 The action function is only applied to an object if it is applicable to that
 object based on the function's first argument. If the function is applicable,
-the object's slots are then only visited if the function returns true. If the
-function is not applicable, the object's slots are visited unconditionally.
+the object's slots are then only visited if the function also returns true. If
+the function is not applicable, the object's declared slots are visited
+unconditionally.
 
 Note that if the action function is an implicitly-declared generic function, its
 first argument will be specialized on <object> and so the function will be
