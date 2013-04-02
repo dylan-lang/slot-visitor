@@ -5,7 +5,7 @@ copyright:
 
 define class <unique-item> (<object>)
   slot unique-1 :: <string>;
-  slot unique-2 :: <string>;
+  slot unique-2 :: <integer>;
   slot collection :: <vector>;
 end class;
 
@@ -30,15 +30,26 @@ define function main (name :: <string>, arguments :: <vector>)
 
   let unique-item = make(<unique-item>);
   unique-item.unique-1 := "unique 1";
-  unique-item.unique-2 := "unique 2";
+  unique-item.unique-2 := 2;
   unique-item.collection := vector(coll-item-1, coll-item-2);
   
+  format-out("Action on <object>:\n");
+  force-output(*standard-output*);
   visitor(unique-item,
-      method (object, #key setter, visited) => (do-slots? :: <boolean>)
+      method (object :: <object>, #key setter, visited) => (do-slots? :: <boolean>)
         format-out("%=\n", object);
         force-output(*standard-output*);
         #t
       end method);
+      
+  format-out("\nAction on <string>:\n");
+  force-output(*standard-output*);
+  visitor(unique-item,
+    method (object :: <string>, #key setter, visited) => (do-slots? :: <boolean>)
+      format-out("%=\n", object);
+      force-output(*standard-output*);
+      #t
+    end method);
 
   exit-application(0);
 end function main;
