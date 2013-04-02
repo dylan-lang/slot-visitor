@@ -57,7 +57,7 @@ end class;
 define slot-visitor visit-every-name                                    [:1]
   <person>,  name;
   <manager>, manager-name;
-  <string>   ;
+  <string>   ;                                                          [:2]
 end slot-visitor;
 
 [END EXAMPLE]
@@ -105,8 +105,12 @@ unknown method name errors during compilation.
 The 'collection-recursive' [code] adjective shown in the macro syntax adds a
 default behavior for collections that are not included as 'CLASS' arguments to
 the macro. This behavior is to visit and apply the action function to every
-element of the collection; an appropriate 'setter' argument will be passed to
-the action function.
+element of the collection. If the collection is mutable, an appropriate
+'setter' keyword argument will be passed to the action function.
+
+Note that strings are collections, so to prevent recursing into every character
+of a string, include '<string>' [code] as a 'CLASS' argument to the macro as
+shown in line [:2] of the example.
 
 
 [1]: The visitor function has the following signature:
