@@ -14,10 +14,16 @@ define macro slot-visitor-definer
          => ()
             // Recurse into collection elements
             let pruned-keys = my-remove-property(keys, #[#"setter", #"visited"]);
-            for (o keyed-by i in col)
-               apply(?name, o, action, setter:, rcurry(my-element-setter, col, i),
-                     visited:, visited, pruned-keys)
-            end for;
+            if (instance?(col, <mutable-collection>))
+               for (o keyed-by i in col)
+                  apply(?name, o, action, setter:, rcurry(my-element-setter, col, i),
+                        visited:, visited, pruned-keys)
+               end for
+            else
+               for (o keyed-by i in col)
+                  apply(?name, o, action, setter:, #f, visited:, visited, pruned-keys)
+               end for
+            end if
          end method;
 
          define method ?name ## "-slots"
